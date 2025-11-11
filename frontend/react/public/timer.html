@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Secret Nick — Timer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: radial-gradient(
+          circle at top left,
+          #a1d3dd 0%,
+          #9cbbe0d8 45%,
+          #b4cbe7 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .card {
+        background: #ffffff;
+        padding: 32px 32px 28px;
+        border-radius: 24px;
+        box-shadow: 0 18px 40px rgba(15, 35, 52, 0.12);
+        max-width: 560px;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at -10% -10%,
+          rgba(15, 165, 55, 0.25),
+          transparent 55%
+        );
+        pointer-events: none;
+      }
+      .card-inner {
+        position: relative;
+        z-index: 1;
+      }
+      h1 {
+        margin: 0 0 4px;
+        font-size: 26px;
+        text-align: left;
+        color: #13253f;
+      }
+      .subtitle {
+        margin: 0 0 24px;
+        text-align: left;
+        color: #5c6a80;
+        font-size: 14px;
+      }
+      .row {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+      label {
+        font-size: 13px;
+        color: #3b4a5f;
+        font-weight: 500;
+      }
+      input[type="datetime-local"] {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid #d0d9e8;
+        font-size: 14px;
+        color: #1d2a3b;
+        outline: none;
+        transition:
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+      input[type="datetime-local"]:focus {
+        border-color: #1b8329;
+        box-shadow: 0 0 0 2px rgba(19, 100, 25, 0.25);
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      button {
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: none;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        background: linear-gradient(135deg, #148929, #1e6b25);
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 8px 18px rgba(16, 120, 67, 0.35);
+        transition:
+          transform 0.1s ease,
+          box-shadow 0.1s ease,
+          filter 0.1s ease;
+      }
+      button:hover {
+        filter: brightness(1.03);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 22px rgba(255, 154, 60, 0.45);
+      }
+      .timer {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 6px;
+      }
+      .unit {
+        background: #f5f8ff;
+        border-radius: 16px;
+        padding: 10px 6px;
+        text-align: center;
+        border: 1px solid #e0e7f5;
+      }
+      .value {
+        font-size: 22px;
+        font-weight: 700;
+        color: #13253f;
+      }
+      .label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #6a7992;
+        margin-top: 2px;
+      }
+      .status {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #3b4a5f;
+      }
+      .status.done {
+        font-weight: 600;
+        color: #137b4b;
+      }
+      .note {
+        margin-top: 6px;
+        font-size: 11px;
+        color: #7b879a;
+      }
+      @media (max-width: 480px) {
+        .card {
+          padding: 24px 20px 20px;
+        }
+        .timer {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="card-inner">
+        <h1>Gift exchange timer</h1>
+        <p class="subtitle">
+          Track how much time is left until your Secret Nick gift exchange.
+        </p>
+
+        <div class="row">
+          <label for="exchangeTime"> Date and time of gift exchange: </label>
+          <input type="datetime-local" id="exchangeTime" />
+        </div>
+
+        <div class="actions">
+          <button id="startBtn">Start timer</button>
+        </div>
+
+        <div class="timer" id="timer">
+          <div class="unit">
+            <div class="value" id="days">0</div>
+            <div class="label">days</div>
+          </div>
+          <div class="unit">
+            <div class="value" id="hours">0</div>
+            <div class="label">hours</div>
+          </div>
+          <div class="unit">
+            <div class="value" id="minutes">0</div>
+            <div class="label">minutes</div>
+          </div>
+          <div class="unit">
+            <div class="value" id="seconds">0</div>
+            <div class="label">seconds</div>
+          </div>
+        </div>
+
+        <p class="status" id="statusText">
+          Select a date and click “Start timer”.
+        </p>
+
+        <p class="note">
+          The time is stored in your browser (localStorage), so the timer will
+          not reset when you reload the page.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const exchangeInput = document.getElementById("exchangeTime");
+      const startBtn = document.getElementById("startBtn");
+      const statusText = document.getElementById("statusText");
+
+      const daysEl = document.getElementById("days");
+      const hoursEl = document.getElementById("hours");
+      const minutesEl = document.getElementById("minutes");
+      const secondsEl = document.getElementById("seconds");
+
+      let intervalId = null;
+
+      function loadSavedDate() {
+        const saved = localStorage.getItem("santa_exchange_time");
+        if (saved) {
+          exchangeInput.value = saved;
+          startCountdown();
+        } else {
+          const now = new Date();
+          now.setDate(now.getDate() + 7);
+          const iso = now.toISOString().slice(0, 16);
+          exchangeInput.value = iso;
+        }
+      }
+
+      function startCountdown() {
+        const value = exchangeInput.value;
+        if (!value) {
+          statusText.textContent = "Select a date.";
+          statusText.classList.remove("done");
+          return;
+        }
+
+        const target = new Date(value);
+        if (isNaN(target.getTime())) {
+          statusText.textContent = "Invalid date format.";
+          statusText.classList.remove("done");
+          return;
+        }
+
+        localStorage.setItem("santa_exchange_time", value);
+
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+
+        function update() {
+          const now = new Date();
+          const diff = target.getTime() - now.getTime();
+
+          if (diff <= 0) {
+            clearInterval(intervalId);
+            daysEl.textContent = "0";
+            hoursEl.textContent = "0";
+            minutesEl.textContent = "0";
+            secondsEl.textContent = "0";
+            statusText.textContent =
+              "The time has come! It's time to exchange gifts 🎁";
+            statusText.classList.add("done");
+            return;
+          }
+
+          const totalSeconds = Math.floor(diff / 1000);
+          const days = Math.floor(totalSeconds / (60 * 60 * 24));
+          const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
+          const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+          const seconds = totalSeconds % 60;
+
+          daysEl.textContent = String(days);
+          hoursEl.textContent = String(hours).padStart(2, "0");
+          minutesEl.textContent = String(minutes).padStart(2, "0");
+          secondsEl.textContent = String(seconds).padStart(2, "0");
+
+          statusText.textContent = "Time left until the gift exchange:";
+          statusText.classList.remove("done");
+        }
+
+        update();
+        intervalId = setInterval(update, 1000);
+      }
+
+      startBtn.addEventListener("click", startCountdown);
+      loadSavedDate();
+    </script>
+  </body>
+</html>

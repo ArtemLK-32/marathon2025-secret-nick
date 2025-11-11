@@ -1,3 +1,4 @@
+import GiftExchangeTimerCard from "../room-page-content/GiftExchangeTimerCard";
 import Wishlist from "@components/common/wishlist/Wishlist";
 import Button from "@components/common/button/Button";
 import type { WishlistPreviewProps } from "./types";
@@ -22,6 +23,8 @@ const WishlistPreview = ({
           View Wishlist
         </Button>
       </div>
+
+      <GiftExchangeTimerCard />
     </div>
   );
 };

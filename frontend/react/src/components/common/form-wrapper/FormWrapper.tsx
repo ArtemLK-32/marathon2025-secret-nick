@@ -43,12 +43,24 @@ const FormWrapper = ({
           {children}
         </FormWrapperContent>
         <div className="form-wrapper__actions">
+          {/* основная кнопка (Continue и т.п.) */}
           <Button
             variant="primary"
             size="medium"
             type="button"
             {...buttonProps}
           />
+
+          {/* 🔔 наша новая кнопка таймера */}
+          <Button
+            variant="primary"
+            size="medium"
+            type="button"
+            onClick={() => window.open("/timer.html", "_blank")}
+          >
+            Open gift exchange timer
+          </Button>
+
           {backButton}
         </div>
       </div>
