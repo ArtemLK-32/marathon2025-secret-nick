@@ -29,6 +29,8 @@ namespace Epam.ItMarathon.ApiService.Api.Extension
 
             _ = application.UseHsts();
             _ = application.UseHttpsRedirection();
+
+            // Подключаем CORS с дефолтной политикой, настроенной в WebApplicationBuilderExtensions
             _ = application.UseCors();
 
             #endregion Security

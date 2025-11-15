@@ -45,13 +45,21 @@ namespace Epam.ItMarathon.ApiService.Api.Extension
 
             #region Security
 
+            // CORS: разрешаем фронтам ходить к API
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policyBuilder =>
                 {
-                    policyBuilder.AllowAnyOrigin()
+                    policyBuilder
+                        .WithOrigins(
+                            "http://localhost:3000",                          // локальный React (если будешь запускать)
+                            "http://localhost:4200",                          // ещё один вариант локального фронта
+                            "https://main.d1ts1reqjgek6h.amplifyapp.com",    // твой фронт на Amplify
+                            "https://marathon2025-secret-nick.onrender.com"  // сам API (если вдруг будет вызывать себя)
+                        )
                         .AllowAnyHeader()
-                        .AllowAnyMethod();
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                 });
             });
 
